@@ -26,5 +26,14 @@ services:
       - KC_DB_PASSWORD=keycloak
     command: start-dev
 
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./api/:/app/
+    ports:
+      - 3000:3000
+
 volumes:
   pg_data:
