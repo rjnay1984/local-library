@@ -1,0 +1,53 @@
+services:
+  keycloak_db:
+    image: postgres:alpine
+    restart: always
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=keycloak
+      - POSTGRES_USER=keycloak
+      - POSTGRES_PASSWORD=keycloak
+
+  keycloak:
+    image: quay.io/keycloak/keycloak
+    restart: always
+    depends_on:
+      - keycloak_db
+    ports:
+      - 8080:8080
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB_URL=jdbc:postgresql://keycloak_db/keycloak
+      - KC_DB=postgres
+      - KC_HOSTNAME=localhost
+      - KC_DB_USERNAME=keycloak
+      - KC_DB_PASSWORD=keycloak
+    command: start-dev
+
+  api:
+    build:
+      context: .
+      dockerfile: ./api/Dockerfile.dev
+    depends_on:
+      - keycloak
+    ports:
+      - 3000:3000
+    volumes:
+      - ./api:/app/api
+
+  frontend:
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile.dev
+    depends_on:
+      - keycloak
+      - api
+    ports:
+      - 4200:4200
+    volumes:
+      - ./frontend:/app/frontend
+
+volumes:
+  pg_data:
