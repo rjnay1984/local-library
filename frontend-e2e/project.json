@@ -1,0 +1,22 @@
+{
+  "name": "frontend-e2e",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "frontend-e2e/src",
+  "targets": {
+    "e2e": {
+      "executor": "@nx/playwright:playwright",
+      "outputs": ["{workspaceRoot}/dist/.playwright/frontend-e2e"],
+      "options": {
+        "config": "frontend-e2e/playwright.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["frontend-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "implicitDependencies": ["frontend"]
+}
