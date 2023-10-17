@@ -2,7 +2,9 @@
   "name": "@local-library/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "serve:frontend": "nx run frontend:serve:development"
+  },
   "private": true,
   "devDependencies": {
     "@nestjs/schematics": "^10.0.1",
